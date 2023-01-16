@@ -81,10 +81,9 @@ admin admin
 秉持”业务服务只负责发消息“的解耦原则，业务服务在需要发消息的时候，代码应该越简单越好。所以，Rpush的发消息的sdk，一种消息只需要一行代码，有几种消息就有几行代码。比如这样：
 
 ```java
-/**
- * @author shuangmulin
- * @since 2021/6/8/008 11:37
- **/
+// 1、如果您是从这里直接上手的，需要登录http://localhost:8124 配置邮箱、企业公众号等基本信息 
+// 2、公众号配置需要去官网获取appid 以及 secret。再获取代发用户的openid这个关注公众号用户的唯一ID，可以通过浏览器右键查看源码去找，有点奇葩，应该还有更好的办法，后续再找。
+
 public class RpushSenderTest {
     /**
      * 要发送的内容
@@ -104,13 +103,14 @@ public class RpushSenderTest {
             ">如需修改会议信息，请点击：[修改会议信息](https://work.weixin.qq.com)";
 
     public static void main(String[] args) {
-        // 企业微信-markdown消息
-        MarkdownMessageDTO markdown = RpushMessage.WECHAT_WORK_AGENT_MARKDOWN().content(content).receiverIds(Collections.singletonList("ZhongBaoLin")).build();
+         // 企业微信-markdown消息
+        // MarkdownMessageDTO markdown = RpushMessage.WECHAT_WORK_AGENT_MARKDOWN().content(content).receiverIds(Collections.singletonList("oRtpyuKw6ZElNELuenaGQS-Z48lA")).build();
         // 企业微信-群机器人消息
-        TextMessageDTO text = RpushMessage.WECHAT_WORK_ROBOT_TEXT().content(content).receiverIds(Collections.singletonList("ZhongBaoLin")).build();
+        // TextMessageDTO text = RpushMessage.WECHAT_WORK_ROBOT_TEXT().content(content).receiverIds(Collections.singletonList("oRtpyuKw6ZElNELuenaGQS-Z48lA")).build();
+        TextMessageDTO text = RpushMessage.WECHAT_OFFICIAL_ACCOUNT_TEXT().content(content).receiverIds(Collections.singletonList("oRtpyuKw6ZElNELuenaGQS-Z48lA")).build();
         // 邮箱
-        EmailMessageDTO email = RpushMessage.EMAIL().title("会议通知").content(content).build();
-        RpushService.instance("baolin", "666666").sendMessage(markdown, text, email); // 填上账号密码，运行即可
+        EmailMessageDTO email = RpushMessage.EMAIL().title("会议通知").content(content).receiverIds(Collections.singletonList("liu_zyong@cvicse.com")).build();
+        RpushService.instance("http://localhost:8124", "admin", "admin").sendMessage(email, text); // 填上账号密码，运行即可
     }
 }
 ```
